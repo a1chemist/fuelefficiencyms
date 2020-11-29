@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>core.microservice</groupId>
+    <artifactId>FuelEfficiencyMS</artifactId>
+    <version>${revision}-${sha1}${changelist}</version>
+
+    <properties>
+        <application.port>8888</application.port>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <revision>1.0</revision>
+        <sha1>master</sha1>
+        <changelist>-SNAPSHOT</changelist>
+        <nexus.maven.url>http://nexus.remote:8081</nexus.maven.url>
+        <nexus.docker.url>nexus.remote:8123</nexus.docker.url>
+
+        <mockserver.version>1.5-master</mockserver.version>
+        <mocktesttools.version>1.10-master</mocktesttools.version>
+        <fuelsaver.client.version>1.4-master</fuelsaver.client.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>core.repo.central</id>
+            <name>Central Repository</name>
+            <url>${nexus.maven.url}/repository/maven-central/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>core.repo.thirdparty</id>
+            <name>Third party</name>
+            <url>${nexus.maven.url}/repository/thirdparty/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>core.repo.releases</id>
+            <name>Releases</name>
+            <url>${nexus.maven.url}/repository/maven-releases/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>core.repo.snapshots</id>
+            <name>Snapshots</name>
+            <url>${nexus.maven.url}/repository/maven-snapshots/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>core.repo.releases</id>
+            <name>Internal Releases</name>
+            <url>${nexus.maven.url}/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>core.repo.snapshots</id>
+            <name>Internal Snapshots</name>
+            <url>${nexus.maven.url}/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>2.3.3.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>11.0.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <maven.environment>dev</maven.environment>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <maven.environment>prod</maven.environment>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>application.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>application.yml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>set-system-properties</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>sendCredentialsOverHttp</name>
+                                    <value>true</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.3.3.RELEASE</version>
+                <configuration>
+                    <addResources>true</addResources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build-info</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!-- mvn compile jib:build -->
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>2.6.0</version>
+
+                <configuration>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
+                    <containerizingMode>packaged</containerizingMode>
+                    <from>
+                        <image>
+                            ${nexus.docker.url}/repository/gen-docker/java-base@sha256:e428380131146f1a0dfc71b4303524786701828e0ce41f0211253eb1da693058
+                        </image>
+                    </from>
+                    <to>
+                        <image>
+                            ${nexus.docker.url}/repository/gen-docker/fuel-efficiency-ms/${sha1}:${revision}${changelist}
+                        </image>
+                    </to>
+
+                    <container>
+                        <jvmFlags>
+                            <jvmFlag>-Xms2g</jvmFlag>
+                            <jvmFlag>-Xmx4g</jvmFlag>
+                            <jvmFlag>-XX:+HeapDumpOnOutOfMemoryError</jvmFlag>
+                            <jvmFlag>-XX:+PrintGCDetails</jvmFlag>
+                            <jvmFlag>-XX:+PrintGCDateStamps</jvmFlag>
+                            <!--                            <jvmFlag>-verbose:gc</jvmFlag>-->
+                            <!--                            <jvmFlag>-Xloggc:${installPrefix}/log/java-gc.log</jvmFlag>-->
+                            <!--                            <jvmFlag>-Dconfig.properties.file=file:${installPrefix}/config.properties</jvmFlag>-->
+                            <!--                            <jvmFlag>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmFlag>-->
+                        </jvmFlags>
+                        <mainClass>core.microservice.fuelefficiency.FuelEfficiencyMSApp</mainClass>
+                        <ports>
+                            <port>${application.port}</port>
+                        </ports>
+                        <creationTime>${maven.build.timestamp}</creationTime>
+                        <filesModificationTime>${maven.build.timestamp}</filesModificationTime>
+                        <environment>
+                            <PATH>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/jdk/bin/
+                            </PATH>
+                            <JAVA_HOME>/usr/local/jdk</JAVA_HOME>
+                        </environment>
+                    </container>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10.6</version>
+        </dependency>
+        <dependency>
+            <groupId>core.client.fuelsaver</groupId>
+            <artifactId>FuelSaverClient</artifactId>
+            <version>${fuelsaver.client.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

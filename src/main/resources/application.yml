@@ -1,0 +1,119 @@
+spring:
+  main:
+    banner-mode: off
+  profiles:
+    active: @maven.environment@
+---
+spring:
+  application:
+    name: fuelsaver-microservice
+  profiles: dev
+  output:
+    ansi:
+      enabled: never
+
+server:
+  port: @application.port@
+  tomcat:
+    accesslog:
+      enabled: true
+
+keycloak:
+  auth-server-url: http://keycloak.local:8180/auth/
+  realm: motor-market
+  resource: fe-api
+  public-client: true
+  principal-attribute: preferred_username
+  ssl-required: none
+  cors: false
+
+fuelsaver:
+  service:
+    username: DCB98185
+    connection:
+      timeout: 10000
+    request:
+      timeout: 10000
+    soap:
+      debug: true
+      url: http://soap.fuelsaver.govt.nz
+    rest:
+      debug: true
+      label:
+        url: https://fuelsaver.govt.nz/api
+      listing:
+        url: https://resources.fuelsaver.govt.nz/api
+    image:
+      small:
+        base:
+          url: https://rc-resources.dotnous.com/rightcar_resources/images/labels/colour/
+      medium:
+        base:
+          url: https://rc-resources.dotnous.com/rightcar_resources/images/labels/colour/portrait/
+
+logging.level:
+  org.springframework:
+    security: info
+
+springdoc:
+  swagger-ui:
+    default-models-expand-depth: -1
+    disable-swagger-default-url: true
+    enabled: false
+---
+spring:
+  application:
+    name: fuelsaver-microservice
+  profiles: prod
+  output:
+    ansi:
+      enabled: never
+
+server:
+  port: @application.port@
+  tomcat:
+    accesslog:
+      enabled: false
+
+keycloak:
+  auth-server-url: http://54.79.150.222/auth/
+  realm: motor-market
+  resource: fe-api
+  public-client: true
+  principal-attribute: preferred_username
+  ssl-required: none
+  cors: false
+
+fuelsaver:
+  service:
+    username: DCB98185
+    connection:
+      timeout: 10000
+    request:
+      timeout: 10000
+    soap:
+      debug: true
+      url: http://soap.fuelsaver.govt.nz
+    rest:
+      debug: true
+      label:
+        url: https://fuelsaver.govt.nz/api
+      listing:
+        url: https://resources.fuelsaver.govt.nz/api
+    image:
+      small:
+        base:
+          url: https://rc-resources.dotnous.com/rightcar_resources/images/labels/colour/
+      medium:
+        base:
+          url: https://rc-resources.dotnous.com/rightcar_resources/images/labels/colour/portrait/
+
+logging.level:
+  org.springframework:
+    security: info
+
+springdoc:
+  swagger-ui:
+    default-models-expand-depth: -1
+    disable-swagger-default-url: true
+    enabled: false
