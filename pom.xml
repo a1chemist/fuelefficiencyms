@@ -12,7 +12,7 @@
         <application.port>8888</application.port>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <revision>1.1</revision>
+        <revision>1.2</revision>
         <sha1>master</sha1>
         <changelist>-SNAPSHOT</changelist>
         <nexus.maven.url>http://nexus.remote:8081</nexus.maven.url>
