@@ -228,6 +228,10 @@
         </plugins>
     </build>
 
+    <scm>
+        <developerConnection>scm:git:https://github.com/a1chemist/fuelefficiencyms.git</developerConnection>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -260,7 +264,6 @@
             <artifactId>FuelSaverClient</artifactId>
             <version>${fuelsaver.client.version}</version>
         </dependency>
-
     </dependencies>
 
 </project>
