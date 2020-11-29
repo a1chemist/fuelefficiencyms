@@ -9,5 +9,6 @@ This is a Docker microservice REST API which is implemented using Java Springboo
 * Docker
 
 ### Deployment
-* ./release.sh [SNAPSHOT] - release a snapshot, no argument will release a snapshot by default 
-* ./release.sh [RELEASE] - release a final release for production
+* ./release.sh \<SNAPSHOT\> - release a snapshot, no argument will release a snapshot by default 
+* ./release.sh \<RELEASE\> - release a final release for production
+* ./release.sh \<SNAPSHOT|RELEASE\> \<container\>  - release a containerised artifact 

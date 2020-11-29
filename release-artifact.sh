@@ -5,14 +5,14 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 if [ ! -z $1 ] && [ "$1" != 'RELEASE' ] && [ "$1" != 'SNAPSHOT' ]
 then
-    echo "Final release artifacts are indicated by a second argument equal to: RELEASE"
+    echo "Container release artifacts are indicated by a second argument equal to: container"
     echo "USAGE: ./${SCRIPT_NAME} <SNAPSHOT|RELEASE> [container]"
     exit 1
 fi
 
 if [ -z $2 ]
 then
-  echo "Not a container deployment"
+  echo "*** Not a container deployment ***"
   if [ -z $1 ]
   then
     mvn clean deploy -DskipTests --batch-mode -Dsha1=${CURRENT_BRANCH}
@@ -23,15 +23,16 @@ then
     scm:checkin
   fi
 else
-  if [ "$2" != 'container' ]
+  if [ "$2" = 'container' ]
   then
+    echo "*** Container deployment ***"
     if [ "$1" = 'RELEASE' ]
     then
       echo "Deploying production container"
-#    mvn clean install -DskipTests=true -Dchangelist= jib:build
+      mvn clean install -DskipTests=true -Dchangelist= jib:build
     else
       echo "Deploying snapshot container"
-#    mvn clean install -DskipTests=true jib:build
+      mvn clean install -DskipTests=true jib:build
     fi
   fi
 fi
