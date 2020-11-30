@@ -17,4 +17,6 @@ public interface FuelSaverService {
     FEData getFeDataByVin(String vin) throws Exception;
 
     FEData getFeDataByChassis(String chassis) throws Exception;
+
+    boolean checkApiStatus() throws Exception;
 }

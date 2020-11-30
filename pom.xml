@@ -20,7 +20,7 @@
 
         <mockserver.version>1.5-master</mockserver.version>
         <mocktesttools.version>1.10-master</mocktesttools.version>
-        <fuelsaver.client.version>1.4-master</fuelsaver.client.version>
+        <fuelsaver.client.version>1.5-master</fuelsaver.client.version>
     </properties>
 
     <repositories>

@@ -3,16 +3,22 @@ package core.microservice.fuelefficiency.api.objects.api;
 import core.microservice.fuelefficiency.domain.objects.FEData;
 import core.microservice.fuelefficiency.domain.objects.FELabelUrl;
 import core.microservice.fuelefficiency.domain.objects.FEPrintLabel;
+import org.joda.time.DateTime;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class ApiObjectFactoryImpl implements ApiObjectFactory {
 
     @Override
     public LabelResponse createLabelResponse(FELabelUrl feLabelUrl) {
-        return new LabelResponse(feLabelUrl.getSmallLabelUrl(), feLabelUrl.getMediumLabelUrl());
+        return new LabelResponse(
+                createTransaction(),
+                feLabelUrl.getSmallLabelUrl(),
+                feLabelUrl.getMediumLabelUrl());
     }
 
     @Override
@@ -35,12 +41,15 @@ public class ApiObjectFactoryImpl implements ApiObjectFactory {
 
     @Override
     public PrintLabelResponse createPrintLabelResponse(FEPrintLabel fePrintLabel) {
-        return new PrintLabelResponse(fePrintLabel.getBase64ImageData());
+        return new PrintLabelResponse(
+                createTransaction(),
+                fePrintLabel.getBase64ImageData()
+        );
     }
 
     @Override
     public FuelEfficiencyResponse createFuelEfficiencyResponse(FEData feData) {
-        FuelEfficiencyResponse response = new FuelEfficiencyResponse();
+        FuelEfficiencyResponse response = new FuelEfficiencyResponse(createTransaction());
         response.setAnnualFuelCostDesc(feData.getAnnualFuelCostDesc());
         response.setAnnualFuelCost(feData.getAnnualFuelCost());
         response.setDriverSafetyStars(feData.getDriverSafetyStars());
@@ -67,6 +76,16 @@ public class ApiObjectFactoryImpl implements ApiObjectFactory {
         response.setRawResponse(feData.getRawResponse());
         response.setFoundMatch(feData.getFoundMatch());
         return response;
+    }
+
+    @Override
+    public Transaction createTransaction() {
+        return new Transaction(UUID.randomUUID().toString(), DateTime.now().toDate());
+    }
+
+    @Override
+    public FuelEfficiencyPingResponse createPingResponse(boolean status) {
+        return new FuelEfficiencyPingResponse(status);
     }
 
 }

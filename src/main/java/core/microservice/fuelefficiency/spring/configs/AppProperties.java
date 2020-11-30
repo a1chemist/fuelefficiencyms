@@ -1,4 +1,4 @@
-package core.microservice.fuelefficiency;
+package core.microservice.fuelefficiency.spring.configs;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

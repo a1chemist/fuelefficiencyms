@@ -3,6 +3,7 @@ package core.microservice.fuelefficiency.api.controllers;
 import core.microservice.fuelefficiency.api.objects.api.FuelEfficiencyResponse;
 import core.microservice.fuelefficiency.service.FuelSaverService;
 import core.microservice.fuelefficiency.api.objects.api.ApiObjectFactory;
+import core.microservice.fuelefficiency.spring.configs.AppProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;

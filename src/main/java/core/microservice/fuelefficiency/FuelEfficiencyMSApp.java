@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServic
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = {
-        "core.client",
+        "core.client.fuelsaver",
         "core.microservice.fuelefficiency",
         "io"
 })

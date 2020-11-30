@@ -15,4 +15,8 @@ public interface ApiObjectFactory {
     PrintLabelResponse createPrintLabelResponse(FEPrintLabel fePrintLabel);
 
     FuelEfficiencyResponse createFuelEfficiencyResponse(FEData feData);
+
+    Transaction createTransaction();
+
+    FuelEfficiencyPingResponse createPingResponse(boolean status);
 }

@@ -5,13 +5,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LabelResponse {
 
+    private Transaction transaction;
+
     private String smallLabelUrl;
 
     private String mediumLabelUrl;
 
-    public LabelResponse(){}
+    public LabelResponse() {}
 
-    public LabelResponse(String smallLabelUrl, String mediumLabelUrl) {
+    public LabelResponse(Transaction transaction,
+                         String smallLabelUrl,
+                         String mediumLabelUrl) {
+        this.transaction = transaction;
         this.smallLabelUrl = smallLabelUrl;
         this.mediumLabelUrl = mediumLabelUrl;
     }
@@ -30,5 +35,13 @@ public class LabelResponse {
 
     public void setMediumLabelUrl(String mediumLabelUrl) {
         this.mediumLabelUrl = mediumLabelUrl;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }

@@ -8,6 +8,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonInclude(NON_EMPTY)
 public class FuelEfficiencyResponse {
 
+    private Transaction transaction;
     private String annualFuelCostDesc;
     private Double annualFuelCost;
     private Integer driverSafetyStars;
@@ -34,6 +35,12 @@ public class FuelEfficiencyResponse {
     private Integer nztaVariant;
     private String fuelSaverVehicleType;
     private String emissionTestRegime;
+
+    public FuelEfficiencyResponse() {}
+
+    public FuelEfficiencyResponse(Transaction transaction) {
+        this.transaction = transaction;
+    }
 
     public void setAnnualFuelCostDesc(String annualFuelCostDesc) {
         this.annualFuelCostDesc = annualFuelCostDesc;
@@ -233,5 +240,13 @@ public class FuelEfficiencyResponse {
 
     public String getEmissionTestRegime() {
         return emissionTestRegime;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }

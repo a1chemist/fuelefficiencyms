@@ -8,6 +8,8 @@ import java.io.File;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PrintLabelResponse {
 
+    private Transaction transaction;
+
     private String base64ImageData;
 
     @JsonIgnore
@@ -18,12 +20,9 @@ public class PrintLabelResponse {
 
     public PrintLabelResponse() {}
 
-    public PrintLabelResponse(byte[] imageByteData, File tempFile) {
-        this.imageByteData = imageByteData;
-        this.tempFile = tempFile;
-    }
-
-    public PrintLabelResponse(String base64ImageData) {
+    public PrintLabelResponse(Transaction transaction,
+                              String base64ImageData) {
+        this.transaction = transaction;
         this.base64ImageData = base64ImageData;
     }
 
@@ -49,5 +48,13 @@ public class PrintLabelResponse {
 
     public void setTempFile(File tempFile) {
         this.tempFile = tempFile;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }

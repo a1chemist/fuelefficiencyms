@@ -61,4 +61,14 @@ public class FuelSaverServiceImpl implements FuelSaverService {
         return feObjectFactory.createFeData(response);
     }
 
+    @Override
+    public boolean checkApiStatus() throws Exception {
+        try {
+            return fuelSaverClientFactory.createFuelSaverClient().ping();
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
 }
