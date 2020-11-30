@@ -3,7 +3,7 @@ package core.microservice.fuelefficiency.api.objects.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JsonRootName("pingResponse")
+@JsonRootName("PingResponse")
 public class FuelEfficiencyPingResponse {
 
     @JsonProperty("status")
